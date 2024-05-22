@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] enemyPrefabs;
     public GameObject healthPickup;
     private OutOfBounds player;
-    private int waveCount = 1;
+    private int waveCount = 50;
     public float distance = 15;
     public float intermission = 5;
     private bool isWaiting = false;
