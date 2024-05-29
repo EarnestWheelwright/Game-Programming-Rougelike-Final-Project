@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void ChangeHealth(float healthChange)
+    public virtual void ChangeHealth(float healthChange)
     {
         health += healthChange;
         Debug.Log(health);
