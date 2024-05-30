@@ -38,6 +38,7 @@ public class Base : MonoBehaviour
     private IEnumerator death()
     {
         yield return new WaitForSeconds(2);
+        GameObject.Find("Manager").GetComponent<Manager>().SetGameOver();
         Destroy(gameObject);
     }
 }

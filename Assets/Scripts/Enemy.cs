@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public float maxVelocity;
     public GameObject dizzyEffect;
     private GameObject dizzyFx;
+    private bool gameOver = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,16 +24,19 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 direction = (playerBase.transform.position - transform.position).normalized;
-        dizzyFx.transform.position = transform.position;
-        if (enemyRb.velocity.magnitude < maxVelocity)
+        if(!gameOver)
         {
-            enemyRb.AddForce(direction * speed * Time.deltaTime);
-            dizzyFx.SetActive(false);
-        }
-        else
-        {
-            dizzyFx.SetActive(true);
+            Vector3 direction = (playerBase.transform.position - transform.position).normalized;
+            dizzyFx.transform.position = transform.position;
+            if (enemyRb.velocity.magnitude < maxVelocity)
+            {
+                enemyRb.AddForce(direction * speed * Time.deltaTime);
+                dizzyFx.SetActive(false);
+            }
+            else
+            {
+                dizzyFx.SetActive(true);
+            }
         }
     }
 
@@ -64,5 +68,10 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1);
         Destroy(dizzyFx);
         Destroy(gameObject);
+    }
+    public void SetGameOver()
+    {
+        gameOver = true;
+        enemyRb.isKinematic = true;
     }
 }

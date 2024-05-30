@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     public float maxVelocity;
     public ParticleSystem collisionParticle;
+    public float boostStrength;
+    private bool onBoostCooldown = false;
+    public float boostCooldown = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +29,10 @@ public class PlayerController : MonoBehaviour
         if (playerRb.velocity.magnitude > maxVelocity)
         {
             playerRb.velocity = playerRb.velocity.normalized * maxVelocity;
+        }
+        if(Input.GetKeyDown(KeyCode.Mouse0) && !onBoostCooldown)
+        {
+            Boost();
         }
     }
 
@@ -47,5 +54,26 @@ public class PlayerController : MonoBehaviour
             Enemy enemyComponent = collision.gameObject.GetComponent<Enemy>();
             enemyComponent.ChangeHealth(-playerRb.velocity.magnitude);
         }
+    }
+    private void Boost()
+    {
+        StartCoroutine(BoostCooldown());
+        Debug.Log("X: " + Input.mousePosition.x + " Y: " + Input.mousePosition.y + " Z: " + Input.mousePosition.z);
+        Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.y));
+        Vector3 direction = (worldMousePosition - transform.position);
+        direction.y = 0;
+        direction = direction.normalized;
+        playerRb.AddForce(direction * playerRb.velocity.magnitude * 2 - playerRb.velocity, ForceMode.VelocityChange);
+        playerRb.AddForce(direction * boostStrength, ForceMode.Impulse);
+    }
+    private IEnumerator BoostCooldown()
+    {
+        onBoostCooldown = true;
+        yield return new WaitForSeconds(boostCooldown);
+        onBoostCooldown = false;
+    }
+    public void SetGameOver()
+    {
+        playerRb.isKinematic = true;
     }
 }

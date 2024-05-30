@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
     public GameObject[] enemyPrefabs;
     public GameObject healthPickup;
     private OutOfBounds player;
-    private int waveCount = 50;
+    private int waveCount = 1;
     public float distance = 15;
-    public float intermission = 5;
+    public int intermission = 5;
     private bool isWaiting = false;
+    private bool gameOver = false;
+    public TextMeshProUGUI waveDisplay;
+    public TextMeshProUGUI intermissionTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +26,7 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
         int enemiesAlive = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if(enemiesAlive == 0 && !isWaiting)
+        if(enemiesAlive == 0 && !isWaiting && !gameOver)
         {
             StartCoroutine("Wait");
             isWaiting = true;
@@ -38,13 +43,23 @@ public class SpawnManager : MonoBehaviour
         }
         Vector3 pickupPosition = new Vector3(Random.Range(player.leftBound + 1, player.rightBound - 1), 0, Random.Range(player.lowBound + 1, player.topBound - 1));
         Instantiate(healthPickup, pickupPosition, healthPickup.transform.rotation);
+        waveDisplay.text = "Wave: " + waveCount;
         waveCount++;
         isWaiting = false;
     }
     
     private IEnumerator Wait()
     {
-        yield return new WaitForSeconds(intermission);
+        for(int i = intermission; i >= 0; i--)
+        {
+            intermissionTimer.text = "Intermission\n" + i;
+            yield return new WaitForSeconds(1);
+        }
         SpawnWave(waveCount);
+        intermissionTimer.text = " ";
+    }
+    public void SetGameOver()
+    {
+        gameOver = true;
     }
 }
