@@ -148,6 +148,7 @@ MonoBehaviour:
   health: 25
   maxVelocity: 10
   dizzyEffect: {fileID: 7868637443887039885, guid: 4d024fdd9e4b3134589652bf69734e45, type: 3}
+  healthBar: {fileID: 7466481062328198472, guid: 72f3cf862e93c404d9a4bb0010d6ae16, type: 3}
 --- !u!135 &1510717468457523997
 SphereCollider:
   m_ObjectHideFlags: 0
