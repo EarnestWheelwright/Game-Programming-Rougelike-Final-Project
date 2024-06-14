@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     private Canvas worldCanvas;
     private float maxHealth;
     private Image healthBarColor;
+    public Gradient colors;
     // Start is called before the first frame update
     void Awake()
     {
@@ -88,12 +89,11 @@ public class Enemy : MonoBehaviour
         }
         Debug.Log(health);
         healthBar.SetValueWithoutNotify(health/maxHealth);
-        SetHealthBarColor();
+        SetHealthBarColor(health/maxHealth);
     }
-    private void SetHealthBarColor()
+    private void SetHealthBarColor(float progress)
     {
-        float progress = health / maxHealth;
-        healthBarColor.color = new Color((255 - 255 * progress), 255*progress, 0, 255);
+        healthBarColor.color = colors.Evaluate(progress);
     }
     public float GetHealth()
     {
